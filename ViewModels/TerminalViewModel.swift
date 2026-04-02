@@ -46,6 +46,15 @@ final class TerminalViewModel {
     /// The tone generator for BEEP/SOUND.
     let toneGenerator = ToneGenerator()
 
+    /// Sound adapter for the interpreter.
+    private var _soundAdapter: iPadSoundAdapter?
+    private var soundAdapter: iPadSoundAdapter {
+        if let adapter = _soundAdapter { return adapter }
+        let adapter = iPadSoundAdapter(toneGenerator: toneGenerator)
+        _soundAdapter = adapter
+        return adapter
+    }
+
     // MARK: - Private State
 
     private var runTask: Task<Void, Never>?
@@ -275,6 +284,7 @@ final class TerminalViewModel {
         }
         self.inputHandler = inputHandler
 
+        let soundHandler = soundAdapter
         runTask = Task.detached(priority: .userInitiated) { [weak self] in
             do {
                 var lexer = Lexer(source: source)
@@ -285,6 +295,7 @@ final class TerminalViewModel {
                     program: program,
                     output: outputHandler,
                     input: inputHandler,
+                    sound: soundHandler,
                     maxSteps: 10_000_000
                 )
                 try interpreter.run()
@@ -307,16 +318,7 @@ final class TerminalViewModel {
     private func handleOutputAction(_ action: SwiftUIOutputHandler.Action) {
         switch action {
         case .print(let text):
-            // Check for BEL character (CHR$(7)) for beep
-            if text.contains("\u{07}") {
-                toneGenerator.beep()
-                let cleaned = text.replacingOccurrences(of: "\u{07}", with: "")
-                if !cleaned.isEmpty {
-                    terminal.write(cleaned)
-                }
-            } else {
-                terminal.write(text)
-            }
+            terminal.write(text)
         case .printLine(let text):
             terminal.write(text)
             terminal.write("\n")

@@ -1,0 +1,15 @@
+{
+  "originHash" : "4ee17a794643dd555dc682ee37aa367a6b9a22687a869d75bc2121b5a3c71a8b",
+  "pins" : [
+    {
+      "identity" : "applesoftbasic",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jpurnell/ApplesoftBASIC.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "b3633c76d49eac1626684add0a74a198f8344fa0"
+      }
+    }
+  ],
+  "version" : 3
+}
