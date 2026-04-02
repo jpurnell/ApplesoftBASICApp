@@ -45,13 +45,26 @@ struct CodeEditorView: View {
 
                 Spacer()
 
-                Button {
-                    viewModel.editorText = ""
-                    viewModel.programLines.removeAll()
+                Menu {
+                    Button("Clear Editor") {
+                        viewModel.editorText = ""
+                        viewModel.programLines.removeAll()
+                    }
+                    Button("Clear Terminal") {
+                        viewModel.clearTerminal()
+                    }
+                    Button("Clear Both") {
+                        viewModel.editorText = ""
+                        viewModel.programLines.removeAll()
+                        viewModel.clearTerminal()
+                    }
                 } label: {
                     Image(systemName: "trash")
+                } primaryAction: {
+                    viewModel.editorText = ""
+                    viewModel.programLines.removeAll()
                 }
-                .help("Clear")
+                .help("Clear (long press for options)")
             }
             .font(.title3)
             .padding(.horizontal, 16)
