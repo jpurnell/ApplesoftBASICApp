@@ -1,29 +1,31 @@
 import ApplesoftBASICLib
+import AVFoundation
 
-/// Bridges the iPad app's ToneGenerator to the library's SoundHandler protocol.
+/// Sound handler for the iPad app.
 ///
-/// The interpreter calls SoundHandler methods from a background thread.
-/// This adapter dispatches to @MainActor for the ToneGenerator.
+/// Uses the library's AudioSoundHandler directly since playTone is now
+/// blocking (synchronous) and AVAudioEngine works from any thread.
+#if canImport(AVFoundation)
 final class iPadSoundAdapter: SoundHandler, @unchecked Sendable {
-    private let toneGenerator: ToneGenerator
+    private let handler = AudioSoundHandler()
 
-    /// Creates an adapter wrapping the given tone generator.
-    @MainActor
-    init(toneGenerator: ToneGenerator) {
-        self.toneGenerator = toneGenerator
-    }
+    /// Creates the sound adapter.
+    init() {}
 
-    /// Plays a short beep via the tone generator.
+    /// Plays a short beep. Blocks for ~150ms.
     func beep() {
-        Task { @MainActor [toneGenerator] in
-            toneGenerator.beep()
-        }
+        handler.beep()
     }
 
-    /// Plays a tone at the given frequency and duration.
+    /// Plays a tone at the given frequency. Blocks for the duration.
     func playTone(frequency: Double, duration: Double) {
-        Task { @MainActor [toneGenerator] in
-            toneGenerator.playTone(frequency: frequency, duration: duration)
-        }
+        handler.playTone(frequency: frequency, duration: duration)
     }
 }
+#else
+final class iPadSoundAdapter: SoundHandler, @unchecked Sendable {
+    init() {}
+    func beep() {}
+    func playTone(frequency: Double, duration: Double) {}
+}
+#endif

@@ -43,17 +43,8 @@ final class TerminalViewModel {
 
     // MARK: - Dependencies
 
-    /// The tone generator for BEEP/SOUND.
-    let toneGenerator = ToneGenerator()
-
-    /// Sound adapter for the interpreter.
-    private var _soundAdapter: iPadSoundAdapter?
-    private var soundAdapter: iPadSoundAdapter {
-        if let adapter = _soundAdapter { return adapter }
-        let adapter = iPadSoundAdapter(toneGenerator: toneGenerator)
-        _soundAdapter = adapter
-        return adapter
-    }
+    /// Sound handler for the interpreter (blocking, runs on interpreter thread).
+    private let soundAdapter = iPadSoundAdapter()
 
     // MARK: - Private State
 
