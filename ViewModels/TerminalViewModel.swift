@@ -215,10 +215,14 @@ final class TerminalViewModel {
             .joined(separator: "\n")
     }
 
-    /// Resets the terminal display.
+    /// Stops any running program and clears the terminal display.
     func clearTerminal() {
+        if isRunning {
+            stop()
+        }
         terminal.reset()
-        refreshDisplay()
+        outputLines = []
+        displayText = ""
     }
 
     // MARK: - Private
