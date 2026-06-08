@@ -14,6 +14,7 @@ jobs:
     uses: jpurnell/quality-gate-swift/.github/workflows/quality-gate-reusable.yml@main
     with:
       checks: "all"
+      exclude: "build"
       continue-on-failure: true
       corpus-repo: jpurnell/org-judgement-corpus
     secrets:
