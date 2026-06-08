@@ -5,3 +5,4 @@ DerivedData/
 *.xcodeproj/project.xcworkspace/xcuserdata/
 .build/
 .swiftpm/
+development-guidelines/

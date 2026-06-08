@@ -29,7 +29,7 @@
 
 /* Begin PBXFileReference section */
 		3371C7C21E52909EB9D1CA3C /* SwiftUIInputHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIInputHandler.swift; sourceTree = "<group>"; };
-		3E2A8891E38E2F7DC9453777 /* ApplesoftBASICApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ApplesoftBASICApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3E2A8891E38E2F7DC9453777 /* ApplesoftBASICApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ApplesoftBASICApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		496D2AA0CB8B0AF6B8170D3F /* TerminalBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalBuffer.swift; sourceTree = "<group>"; };
 		55E9380CA91FD53FE879B48A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5D38BAD6BF2E790AA8F38C05 /* CodeEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeEditorView.swift; sourceTree = "<group>"; };
@@ -187,8 +187,6 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1700;
-				TargetAttributes = {
-				};
 			};
 			buildConfigurationList = C61DB12F50B50954AAA5826E /* Build configuration list for PBXProject "ApplesoftBASICApp" */;
 			developmentRegion = en;
@@ -312,6 +310,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = BNDA9Y6YV9;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -395,6 +394,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = BNDA9Y6YV9;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
