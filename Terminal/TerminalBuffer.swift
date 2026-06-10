@@ -77,19 +77,6 @@ final class TerminalBuffer: Sendable {
         cursorCol = 0
     }
 
-    /// Returns the full display text (scrollback + current screen).
-    func displayText() -> String {
-        var lines = scrollback
-        for row in 0..<rows {
-            lines.append(gridRowToString(row))
-        }
-        // Trim trailing empty lines
-        while let last = lines.last, last.trimmingCharacters(in: .whitespaces).isEmpty {
-            lines.removeLast()
-        }
-        return lines.joined(separator: "\n")
-    }
-
     /// Returns just the visible screen content as an array of strings.
     func screenLines() -> [String] {
         (0..<rows).map { gridRowToString($0) }

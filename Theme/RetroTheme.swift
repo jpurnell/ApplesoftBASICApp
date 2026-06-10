@@ -43,10 +43,6 @@ enum TerminalTheme: String, CaseIterable, Identifiable, Sendable {
         self != .paper
     }
 
-    var cursorColor: Color {
-        textColor
-    }
-
     var inputFieldBackground: Color {
         switch self {
         case .paper:

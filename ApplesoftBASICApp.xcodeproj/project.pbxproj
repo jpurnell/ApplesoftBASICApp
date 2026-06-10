@@ -23,7 +23,6 @@
 		E6C68452BE314C3EB7BD9D65 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0C3E20D5C6C8522E17D05 /* SettingsView.swift */; };
 		E78B95C6750A2FE2DFD02C2E /* Samples in Resources */ = {isa = PBXBuildFile; fileRef = 99DB98464BBA4D5F292C544C /* Samples */; };
 		E7C72EFBD4D589B7A4DFB10B /* ApplesoftBASICiPadApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCA7F7B1AD954CEE005907F /* ApplesoftBASICiPadApp.swift */; };
-		F073545EB491B7E8BB8B8F7F /* ToneGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0DCF6CB53A7FB1375F9C798 /* ToneGenerator.swift */; };
 		FCCC90735C5EFAC754A8669F /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = EB02A7E56458FC9576A12897 /* Fonts */; };
 /* End PBXBuildFile section */
 
@@ -45,7 +44,6 @@
 		CD48F923A2E9BB6FBD7BCDB8 /* iPadSoundAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iPadSoundAdapter.swift; sourceTree = "<group>"; };
 		D4D0C3E20D5C6C8522E17D05 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		EB02A7E56458FC9576A12897 /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fonts; path = Resources/Fonts; sourceTree = SOURCE_ROOT; };
-		F0DCF6CB53A7FB1375F9C798 /* ToneGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToneGenerator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,7 +87,6 @@
 			isa = PBXGroup;
 			children = (
 				CD48F923A2E9BB6FBD7BCDB8 /* iPadSoundAdapter.swift */,
-				F0DCF6CB53A7FB1375F9C798 /* ToneGenerator.swift */,
 			);
 			path = Sound;
 			sourceTree = "<group>";
@@ -240,7 +237,6 @@
 				788C6AE49A5B570ABD686E52 /* TerminalView.swift in Sources */,
 				1D25D0FC2EB7B7591A48DC7B /* TerminalViewModel.swift in Sources */,
 				93E5CFC1F9ECFE6FB89DE51D /* ThemeSettings.swift in Sources */,
-				F073545EB491B7E8BB8B8F7F /* ToneGenerator.swift in Sources */,
 				CBCA3BC67B80B939F0F28A3B /* iPadSoundAdapter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
