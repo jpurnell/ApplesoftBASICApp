@@ -47,22 +47,19 @@ struct CodeEditorView: View {
 
                 Menu {
                     Button("Clear Editor") {
-                        viewModel.editorText = ""
-                        viewModel.programLines.removeAll()
+                        viewModel.clearEditor()
                     }
                     Button("Clear Terminal") {
                         viewModel.clearTerminal()
                     }
                     Button("Clear Both") {
-                        viewModel.editorText = ""
-                        viewModel.programLines.removeAll()
+                        viewModel.clearEditor()
                         viewModel.clearTerminal()
                     }
                 } label: {
                     Image(systemName: "trash")
                 } primaryAction: {
-                    viewModel.editorText = ""
-                    viewModel.programLines.removeAll()
+                    viewModel.clearEditor()
                 }
                 .help("Clear (long press for options)")
             }

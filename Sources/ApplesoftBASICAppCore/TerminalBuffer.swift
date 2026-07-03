@@ -6,30 +6,34 @@ import Foundation
 /// cursor positioning (`ESC[row;colH`), clear screen (`ESC[2J`),
 /// and text modes (`ESC[7m` inverse, `ESC[0m` reset).
 @MainActor
-final class TerminalBuffer: Sendable {
+public final class TerminalBuffer {
 
     /// A single character cell in the terminal grid.
-    struct Cell: Sendable, Equatable {
-        var character: Character = " "
-        var isInverse: Bool = false
+    public struct Cell: Sendable, Equatable {
+        /// The glyph displayed in this cell.
+        public var character: Character = " "
+        /// Whether the cell is rendered with inverse (reversed) video.
+        public var isInverse: Bool = false
     }
 
-    /// Terminal dimensions.
-    let columns: Int
-    let rows: Int
+    /// The number of character columns in the display.
+    public let columns: Int
+    /// The number of character rows in the display.
+    public let rows: Int
 
-    /// The character grid.
-    private(set) var grid: [[Cell]]
+    /// The character grid, indexed `grid[row][column]`.
+    public private(set) var grid: [[Cell]]
 
-    /// Current cursor position (0-indexed).
-    private(set) var cursorRow: Int = 0
-    private(set) var cursorCol: Int = 0
+    /// The current cursor row (0-indexed).
+    public private(set) var cursorRow: Int = 0
+    /// The current cursor column (0-indexed).
+    public private(set) var cursorCol: Int = 0
 
     /// Current text mode.
     private var inverseMode: Bool = false
 
     /// Scrollback buffer — completed lines that scrolled off the top.
-    private(set) var scrollback: [String] = []
+    public private(set) var scrollback: [String] = []
 
     /// Maximum scrollback lines.
     private let maxScrollback = 5000
@@ -44,7 +48,11 @@ final class TerminalBuffer: Sendable {
         case csi          // received ESC[
     }
 
-    init(columns: Int = 80, rows: Int = 24) {
+    /// Creates a terminal buffer with the given dimensions.
+    /// - Parameters:
+    ///   - columns: The number of character columns (default 80).
+    ///   - rows: The number of character rows (default 24).
+    public init(columns: Int = 80, rows: Int = 24) {
         self.columns = columns
         self.rows = rows
         self.grid = Array(
@@ -54,14 +62,14 @@ final class TerminalBuffer: Sendable {
     }
 
     /// Writes a string to the terminal, interpreting ANSI escape sequences.
-    func write(_ text: String) {
+    public func write(_ text: String) {
         for char in text {
             processCharacter(char)
         }
     }
 
     /// Clears the entire screen and resets cursor to top-left.
-    func clearScreen() {
+    public func clearScreen() {
         // Save current screen content to scrollback
         for row in 0..<rows {
             let line = gridRowToString(row)
@@ -78,12 +86,12 @@ final class TerminalBuffer: Sendable {
     }
 
     /// Returns just the visible screen content as an array of strings.
-    func screenLines() -> [String] {
+    public func screenLines() -> [String] {
         (0..<rows).map { gridRowToString($0) }
     }
 
     /// Resets the terminal completely.
-    func reset() {
+    public func reset() {
         scrollback.removeAll()
         clearScreen()
         inverseMode = false

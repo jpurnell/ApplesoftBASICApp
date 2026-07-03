@@ -1,5 +1,6 @@
 import Foundation
 import ApplesoftBASICLib
+import ApplesoftBASICAppCore
 
 /// Central coordinator for the BASIC interpreter in SwiftUI.
 ///
@@ -35,10 +36,10 @@ final class TerminalViewModel {
 
     // MARK: - Program Storage
 
-    /// Stored program lines, keyed by line number.
-    var programLines: [Int: String] = [:]
+    /// The stored BASIC program: line storage, LIST/DEL, and source rendering.
+    private(set) var program = ProgramStore()
 
-    /// The editor text — kept in sync with programLines.
+    /// The editor text — kept in sync with the stored program.
     var editorText: String = ""
 
     // MARK: - Dependencies
@@ -72,50 +73,22 @@ final class TerminalViewModel {
         // Echo the input
         appendToTerminal("] \(trimmed)\n")
 
-        let upper = trimmed.uppercased()
-
-        if upper == "RUN" {
+        switch REPLParser.parse(trimmed) {
+        case .run:
             run()
-            return
-        }
-        if upper == "LIST" {
-            list()
-            return
-        }
-        if upper.hasPrefix("LIST ") {
-            list(range: String(upper.dropFirst(5)))
-            return
-        }
-        if upper == "NEW" {
+        case .list(let range):
+            list(range: range)
+        case .new:
             new()
-            return
+        case .delete(let range):
+            program.deleteLines(range: range)
+        case .store(let lineNumber, let content):
+            program.store(lineNumber: lineNumber, content: content)
+        case .direct(let statement):
+            executeDirect(statement)
+        case .empty:
+            break
         }
-        if upper.hasPrefix("DEL ") {
-            deleteLines(range: String(upper.dropFirst(4)))
-            return
-        }
-
-        // Check for line number → store/delete
-        if let firstChar = trimmed.first, firstChar.isNumber {
-            var numStr = ""
-            var rest = trimmed[trimmed.startIndex...]
-            while let char = rest.first, char.isNumber {
-                numStr.append(char)
-                rest = rest.dropFirst()
-            }
-            if let lineNum = Int(numStr) {
-                let content = String(rest).trimmingCharacters(in: .whitespaces)
-                if content.isEmpty {
-                    programLines.removeValue(forKey: lineNum)
-                } else {
-                    programLines[lineNum] = "\(lineNum) \(content)"
-                }
-                return
-            }
-        }
-
-        // Direct execution
-        executeDirect(trimmed)
     }
 
     /// Submits input when the interpreter is waiting (INPUT/GET).
@@ -132,12 +105,10 @@ final class TerminalViewModel {
     func run() {
         // Always load from editor to keep in sync
         if !editorText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            loadProgramWithoutEditorSync(editorText)
+            program.load(from: editorText)
         }
 
-        let source = programLines.keys.sorted()
-            .compactMap { programLines[$0] }
-            .joined(separator: "\n")
+        let source = program.source()
 
         guard !source.isEmpty else {
             appendToTerminal("?NO PROGRAM IN MEMORY\n")
@@ -159,60 +130,34 @@ final class TerminalViewModel {
 
     /// Lists the stored program.
     func list(range: String? = nil) {
-        let sortedKeys = programLines.keys.sorted()
-
-        if let range {
-            let parts = range.split(separator: "-")
-            let start = Int(parts.first ?? "") ?? 0
-            let end = parts.count > 1 ? (Int(parts.last ?? "") ?? Int.max) : start
-            for key in sortedKeys where key >= start && key <= end {
-                if let line = programLines[key] {
-                    appendToTerminal("\(line)\n")
-                }
-            }
-        } else {
-            for key in sortedKeys {
-                if let line = programLines[key] {
-                    appendToTerminal("\(line)\n")
-                }
-            }
+        for line in program.listing(range: range) {
+            appendToTerminal("\(line)\n")
         }
     }
 
     /// Clears the stored program and editor.
     func new() {
-        programLines.removeAll()
+        program.removeAll()
         editorText = ""
         appendToTerminal("\n")
     }
 
-    /// Loads source code into programLines by parsing line numbers.
+    /// Clears the editor text and stored program (without echoing to the terminal).
+    func clearEditor() {
+        editorText = ""
+        program.removeAll()
+    }
+
+    /// Loads source code into the stored program by parsing line numbers.
     /// Also updates the editor text to stay in sync.
     func loadProgram(_ source: String) {
-        programLines.removeAll()
-        for line in source.components(separatedBy: .newlines) {
-            let trimmed = line.trimmingCharacters(in: .whitespaces)
-            guard !trimmed.isEmpty else { continue }
-            guard let firstChar = trimmed.first, firstChar.isNumber else { continue }
-
-            var numStr = ""
-            var rest = trimmed[trimmed.startIndex...]
-            while let char = rest.first, char.isNumber {
-                numStr.append(char)
-                rest = rest.dropFirst()
-            }
-            if let lineNum = Int(numStr) {
-                programLines[lineNum] = trimmed
-            }
-        }
-        editorText = programSource()
+        program.load(from: source)
+        editorText = program.source()
     }
 
     /// Returns the program as a source string (for the code editor).
     func programSource() -> String {
-        programLines.keys.sorted()
-            .compactMap { programLines[$0] }
-            .joined(separator: "\n")
+        program.source()
     }
 
     /// Stops any running program and clears the terminal display.
@@ -226,35 +171,6 @@ final class TerminalViewModel {
     }
 
     // MARK: - Private
-
-    /// Loads program without syncing back to editorText (avoids circular update).
-    private func loadProgramWithoutEditorSync(_ source: String) {
-        programLines.removeAll()
-        for line in source.components(separatedBy: .newlines) {
-            let trimmed = line.trimmingCharacters(in: .whitespaces)
-            guard !trimmed.isEmpty else { continue }
-            guard let firstChar = trimmed.first, firstChar.isNumber else { continue }
-
-            var numStr = ""
-            var rest = trimmed[trimmed.startIndex...]
-            while let char = rest.first, char.isNumber {
-                numStr.append(char)
-                rest = rest.dropFirst()
-            }
-            if let lineNum = Int(numStr) {
-                programLines[lineNum] = trimmed
-            }
-        }
-    }
-
-    private func deleteLines(range: String) {
-        let parts = range.split(separator: "-")
-        let start = Int(parts.first ?? "") ?? 0
-        let end = parts.count > 1 ? (Int(parts.last ?? "") ?? start) : start
-        for key in programLines.keys where key >= start && key <= end {
-            programLines.removeValue(forKey: key)
-        }
-    }
 
     private func executeDirect(_ line: String) {
         let source = "0 \(line)"

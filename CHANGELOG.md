@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased]
+
+### Added
+- `ApplesoftBASICAppCore` Swift package (root `Package.swift`) holding the app's
+  platform-independent logic, so `swift build`/`swift test` and the SPM quality-gate
+  checkers run instead of skipping on this formerly Xcode-only project.
+- `TerminalBuffer` moved into the package with a full swift-testing unit suite
+  (ANSI/CSI parsing, scrollback, cursor movement).
+- `ProgramStore` + `REPLParser`: the program-editing and REPL-command logic
+  extracted from `TerminalViewModel` into pure, tested value types (line storage,
+  `LIST`/`DEL` ranges, source parsing/rendering, command classification).
+
+### Changed
+- The Xcode app now consumes `TerminalBuffer` and `ProgramStore` from the local
+  package via XcodeGen; `TerminalViewModel` delegates program/REPL logic to them.
+
 ## [1.0.0] - 2026-06-07
 
 ### Added

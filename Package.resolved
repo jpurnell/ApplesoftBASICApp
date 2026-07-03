@@ -1,15 +1,6 @@
 {
-  "originHash" : "231f30e75f1433deea3fdf4b42d8a70972c345ffc98c5f03200f0c26d7e9bc3c",
+  "originHash" : "aec85913d7016ad75a2551706d32878ec16a276b3b8454d82e093ee69eba6fb8",
   "pins" : [
-    {
-      "identity" : "applesoftbasic",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/jpurnell/ApplesoftBASIC.git",
-      "state" : {
-        "branch" : "main",
-        "revision" : "87fc31f25361c882a22141015a7cdcba85eb16ad"
-      }
-    },
     {
       "identity" : "swift-docc-plugin",
       "kind" : "remoteSourceControl",

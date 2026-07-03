@@ -19,7 +19,7 @@ An iPad app that interprets and runs Applesoft BASIC programs with a retro termi
 
 ## Building
 
-Open `ApplesoftBASICApp.xcodeproj` in Xcode. The project resolves the `ApplesoftBASIC` Swift package automatically from GitHub.
+Open `ApplesoftBASICApp.xcodeproj` in Xcode. The project resolves the `ApplesoftBASIC` package (from GitHub) and the local `ApplesoftBASICAppCore` package automatically. The `.xcodeproj` is generated from `project.yml` via [XcodeGen](https://github.com/yonaskolb/XcodeGen) — run `xcodegen generate` after editing `project.yml`.
 
 ```
 xcodebuild -project ApplesoftBASICApp.xcodeproj \
@@ -27,14 +27,23 @@ xcodebuild -project ApplesoftBASICApp.xcodeproj \
   -destination 'platform=iOS Simulator,name=iPad Pro'
 ```
 
+The platform-independent core has its own Swift package and unit tests:
+
+```
+swift build      # builds ApplesoftBASICAppCore
+swift test       # runs the core unit tests
+```
+
 ## Project Structure
 
 ```
+Package.swift     ApplesoftBASICAppCore — platform-independent core library
+Sources/          Core library sources (TerminalBuffer, ProgramStore)
+Tests/            Core library unit tests
 App/              App entry point
 Views/            SwiftUI views (editor, terminal, settings, sample picker)
 ViewModels/       TerminalViewModel — bridges interpreter ↔ UI
 IO/               SwiftUI input/output handlers for the interpreter
-Terminal/         Terminal buffer model
 Theme/            Retro theme and display settings
 Sound/            Tone generation and sound adapter
 Resources/        Fonts and sample .bas programs
