@@ -90,10 +90,16 @@ public final class TerminalBuffer {
         (0..<rows).map { gridRowToString($0) }
     }
 
-    /// Resets the terminal completely.
+    /// Resets the terminal completely: blanks the screen and cursor, and
+    /// discards all scrollback (the cleared screen is not re-captured).
     public func reset() {
+        grid = Array(
+            repeating: Array(repeating: Cell(), count: columns),
+            count: rows
+        )
+        cursorRow = 0
+        cursorCol = 0
         scrollback.removeAll()
-        clearScreen()
         inverseMode = false
         escapeState = .normal
         escapeParams = ""

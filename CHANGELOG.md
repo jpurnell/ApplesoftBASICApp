@@ -20,6 +20,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - The Xcode app now consumes `TerminalBuffer` and `ProgramStore` from the local
   package via XcodeGen; `TerminalViewModel` delegates program/REPL logic to them.
 
+### Fixed
+- `TerminalBuffer.reset()` now fully clears scrollback. Previously it emptied
+  scrollback and then re-captured the still-visible screen into it, so a reset
+  left the last screenful of text behind.
+
 ## [1.0.0] - 2026-06-07
 
 ### Added

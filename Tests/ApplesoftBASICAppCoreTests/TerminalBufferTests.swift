@@ -85,16 +85,17 @@ struct TerminalBufferTests {
         #expect(buffer.cursorCol == 0)
     }
 
-    @Test("reset discards prior scrollback but re-captures the visible screen (documented quirk)")
-    func resetReflushesVisibleScreenIntoScrollback() {
+    @Test("reset fully clears scrollback, including the visible screen")
+    func resetClearsScrollback() {
         let buffer = TerminalBuffer(columns: 80, rows: 3)
-        // Force real scrollback: "old" scrolls off the top.
+        // Force real scrollback: "old" scrolls off the top; a/b/c stay visible.
         buffer.write("old\na\nb\nc")
         #expect(buffer.scrollback == ["old"])
         buffer.reset()
-        // reset() removes prior scrollback, then clearScreen() flushes the
-        // still-visible rows (a/b/c) back into scrollback. "old" is gone.
-        #expect(buffer.scrollback == ["a", "b", "c"])
+        // reset() discards prior scrollback AND the visible screen — nothing
+        // should be re-captured into scrollback.
+        #expect(buffer.scrollback.isEmpty)
+        #expect(buffer.screenLines().allSatisfy { $0.isEmpty })
     }
 
     // MARK: - ANSI CSI escape sequences
