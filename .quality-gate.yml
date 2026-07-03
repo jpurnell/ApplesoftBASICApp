@@ -27,6 +27,14 @@ enabledCheckers:
   - consistency
   - xcode-build
 
+# This is an iPad app (SDKROOT=iphoneos, TARGETED_DEVICE_FAMILY=2), so the
+# unreachable checker's cross-module pass needs a fresh Xcode index store.
+# Auto-build refreshes it before analysis; without a matching destination,
+# xcodebuild defaults to macOS and falls back to mismatched iPhone simulators,
+# which fails the build and silently skips cross-module reachability.
+unreachableAutoBuildXcode: true
+xcodeDestination: "generic/platform=iOS Simulator"
+
 consistency:
   corpusPath: /Users/jpurnell/Dropbox/Computer/Development/Swift/Tools/org-judgement-corpus
   projectID: ApplesoftBASICApp
