@@ -1,4 +1,5 @@
 // swift-tools-version: 6.2
+// legibility:description: An iPad app that interprets and runs Applesoft BASIC programs with a retro terminal experience.
 import PackageDescription
 
 let package = Package(
