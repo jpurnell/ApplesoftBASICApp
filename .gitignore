@@ -6,3 +6,5 @@ DerivedData/
 .build/
 .swiftpm/
 development-guidelines/
+/.claude/skills/
+/development-guidelines.pre-v2/
