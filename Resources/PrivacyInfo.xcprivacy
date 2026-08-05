@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- The app performs no tracking as Apple defines it: nothing is linked to
+	     data from other companies' apps or websites, and no data leaves the device. -->
+	<key>NSPrivacyTracking</key>
+	<false/>
+
+	<!-- No network connections are made at all, so there are no tracking domains. -->
+	<key>NSPrivacyTrackingDomains</key>
+	<array/>
+
+	<!-- No data is collected. Programs the user writes stay in the app's own
+	     container; nothing is transmitted off the device. -->
+	<key>NSPrivacyCollectedDataTypes</key>
+	<array/>
+
+	<key>NSPrivacyAccessedAPITypes</key>
+	<array>
+		<dict>
+			<!-- Theme, font, font size and the scanline toggle are read and written
+			     through UserDefaults.standard in Theme/ThemeSettings.swift. These are
+			     the app's own display preferences and are never read by anything else. -->
+			<key>NSPrivacyAccessedAPIType</key>
+			<string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+			<key>NSPrivacyAccessedAPITypeReasons</key>
+			<array>
+				<!-- CA92.1 — access info from the app itself, or its app group container. -->
+				<string>CA92.1</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>

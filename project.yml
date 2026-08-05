@@ -30,6 +30,8 @@ targets:
         type: folder
         buildPhase: resources
       - path: Resources/Assets.xcassets
+      - path: Resources/PrivacyInfo.xcprivacy
+        buildPhase: resources
     dependencies:
       - package: ApplesoftBASIC
         product: ApplesoftBASICLib
