@@ -72,13 +72,18 @@ Sources/[ProjectName]/
 - [x] `project.yml` is the single source of truth for build settings; the
       `.xcodeproj` is generated via XcodeGen
 
+- [x] macOS UI audit — three iPad-shaped assumptions found and fixed for v1.1.0:
+      sheets collapsing (macOS sizes sheets to content), dark-on-black chrome
+      (window appearance did not follow the theme), and the split view opening
+      with the editor pane hidden
+- [x] visionOS verified in the simulator (visionOS 27.0) — split view, themed
+      chrome, and program execution all render correctly
+
 ### What's Next
-- [ ] macOS UI audit — the sample/settings sheets needed explicit minimum frames
-      because macOS sizes sheets to content; other iPad-shaped layouts likely
-      need the same review (the split-view sidebar starts collapsed on a fresh
-      macOS launch)
-- [ ] visionOS has been enabled in the build settings but not yet exercised
-      on-device or in the simulator
+- [ ] Exercise visionOS on device; simulator coverage is not a substitute
+- [ ] The macOS sheet minimum frames are scoped `#if os(macOS)`. If visionOS or a
+      future platform sizes sheets to content the same way, that floor needs to
+      widen rather than be rediscovered as a new bug.
 
 ---
 
