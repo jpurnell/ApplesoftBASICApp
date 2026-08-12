@@ -6,15 +6,20 @@ struct ContentView: View {
     @State private var themeSettings = ThemeSettings()
     @State private var showingSettings = false
     @State private var showingSamples = false
+    // The editor is half the app, not an inspector. Left to its default the
+    // split view opens collapsed on macOS, so a first launch shows a bare
+    // terminal with no visible way to reach the editor at all.
+    @State private var columnVisibility = NavigationSplitViewVisibility.all
 
     var body: some View {
-        NavigationSplitView {
+        NavigationSplitView(columnVisibility: $columnVisibility) {
             CodeEditorView(
                 viewModel: viewModel,
                 themeSettings: themeSettings,
                 showingSamples: $showingSamples
             )
                 .navigationTitle("Editor")
+                .navigationSplitViewColumnWidth(min: 320, ideal: 460)
                 #if os(iOS)
                 .navigationBarTitleDisplayMode(.inline)
                 #endif
@@ -52,6 +57,9 @@ struct ContentView: View {
                     }
                 }
         }
+        // Both panes are primary, so the sidebar should displace the detail
+        // rather than overlay it or be treated as a hideable inspector.
+        .navigationSplitViewStyle(.balanced)
         // The phosphor themes paint a black background, but system chrome — the
         // navigation title, toolbar glyphs, dividers, sheet backgrounds — draws
         // in the window's appearance. Left light, that chrome is dark-on-black

@@ -36,6 +36,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   content and `List`/`Form` supply no intrinsic height. Both now carry a minimum
   frame on macOS. The `.bas` resources were bundled correctly throughout — the
   list simply had zero height to draw into.
+- The split view opened collapsed on a first macOS launch, so the editor pane —
+  half the app — was hidden behind a toolbar button, leaving a bare terminal with
+  no obvious way to reach it. The sidebar is now visible by default and carries a
+  minimum width, and the split view uses the balanced style so both panes share
+  the window rather than the editor overlaying the terminal.
 - The editor's toolbar icons, the navigation title, and the window toolbar glyphs
   were invisible in every theme except Paper. The phosphor themes paint a black
   background, but the window stayed in light appearance, so system-default
