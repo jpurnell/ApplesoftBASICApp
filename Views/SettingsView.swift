@@ -61,6 +61,11 @@ struct SettingsView: View {
                 }
             }
         }
+        // See SampleProgramPicker: macOS sheets size to content, so Form needs
+        // a floor to keep the sheet from collapsing.
+        #if os(macOS)
+        .frame(minWidth: 420, minHeight: 520)
+        #endif
     }
 
     private var previewBox: some View {

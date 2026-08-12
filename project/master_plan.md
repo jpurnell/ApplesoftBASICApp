@@ -64,10 +64,21 @@ Sources/[ProjectName]/
 ## Current Status
 
 ### What's Working
-- [ ] [List completed milestones]
+- [x] Applesoft BASIC interpreter app shipping on iPad (v1.0.0, 2026-06-07)
+- [x] ApplesoftBASICAppCore package extracted — `TerminalBuffer`, `ProgramStore`,
+      `REPLParser` as pure value types with swift-testing suites (39 tests green)
+- [x] Native macOS and visionOS builds alongside iPad (v1.1.0)
+- [x] `PrivacyInfo.xcprivacy` privacy manifest for App Store submission
+- [x] `project.yml` is the single source of truth for build settings; the
+      `.xcodeproj` is generated via XcodeGen
 
 ### What's Next
-- [ ] [List upcoming work items]
+- [ ] macOS UI audit — the sample/settings sheets needed explicit minimum frames
+      because macOS sizes sheets to content; other iPad-shaped layouts likely
+      need the same review (the split-view sidebar starts collapsed on a fresh
+      macOS launch)
+- [ ] visionOS has been enabled in the build settings but not yet exercised
+      on-device or in the simulator
 
 ---
 
@@ -114,4 +125,7 @@ This principle is operationalized in the **Adversarial Review** step of `design_
 
 ---
 
-**Last Updated:** [DATE] ([brief note on what changed])
+**Last Updated:** 2026-08-12 (filled in Current Status against shipped code for the
+v1.1.0 release: Core package extraction, native macOS/visionOS support, privacy
+manifest, and the macOS sheet-sizing fix. Roadmap phases below are still template
+placeholders awaiting product direction.)

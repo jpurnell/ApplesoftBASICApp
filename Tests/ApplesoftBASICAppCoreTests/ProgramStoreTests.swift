@@ -63,6 +63,16 @@ struct ProgramStoreTests {
         #expect(store.lines[10] == "10 PRINT")
     }
 
+    @Test("load handles CRLF, CR, and LF line endings identically")
+    func loadHandlesAllLineEndings() {
+        let expected = [10: "10 PRINT", 20: "20 GOTO 10"]
+        for source in ["10 PRINT\n20 GOTO 10", "10 PRINT\r\n20 GOTO 10", "10 PRINT\r20 GOTO 10"] {
+            var store = ProgramStore()
+            store.load(from: source)
+            #expect(store.lines == expected)
+        }
+    }
+
     @Test("load replaces any previous program")
     func loadReplaces() {
         var store = ProgramStore(lines: [99: "99 END"])

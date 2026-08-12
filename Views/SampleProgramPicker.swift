@@ -56,24 +56,25 @@ struct SampleProgramPicker: View {
                 }
             }
         }
+        // A macOS sheet sizes itself to its content, and List has no intrinsic
+        // height — without a minimum the sheet collapses to just its chrome.
+        #if os(macOS)
+        .frame(minWidth: 420, minHeight: 520)
+        #endif
     }
 
     private func loadSample(_ filename: String) -> String? {
-        // Xcode project resource bundle
+        // Folder-reference layout: Samples/ is preserved inside the bundle.
         if let url = Bundle.main.url(
             forResource: filename,
             withExtension: "bas",
             subdirectory: "Samples"
         ) {
-            return try? String(contentsOf: url)
+            return try? String(contentsOf: url, encoding: .utf8)
         }
-        // Fallback: main bundle
-        if let url = Bundle.main.url(
-            forResource: filename,
-            withExtension: "bas",
-            subdirectory: "Samples"
-        ) {
-            return try? String(contentsOf: url)
+        // Flattened layout: resources copied to the bundle root.
+        if let url = Bundle.main.url(forResource: filename, withExtension: "bas") {
+            return try? String(contentsOf: url, encoding: .utf8)
         }
         return nil
     }

@@ -8,3 +8,6 @@ DerivedData/
 development-guidelines/
 /.claude/skills/
 /development-guidelines.pre-v2/
+
+# Emacs lock files (dangling symlinks, never belong in the repo)
+.#*

@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-08-12
+
 ### Added
 - `ApplesoftBASICAppCore` Swift package (root `Package.swift`) holding the app's
   platform-independent logic, so `swift build`/`swift test` and the SPM quality-gate
@@ -15,12 +17,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `ProgramStore` + `REPLParser`: the program-editing and REPL-command logic
   extracted from `TerminalViewModel` into pure, tested value types (line storage,
   `LIST`/`DEL` ranges, source parsing/rendering, command classification).
+- Native macOS and visionOS builds, alongside the existing iPad build
+  (`SUPPORTED_PLATFORMS` gains `macosx`/`xros`, `TARGETED_DEVICE_FAMILY` gains `7`).
+- App Sandbox and Hardened Runtime enabled for the macOS build.
+- `PrivacyInfo.xcprivacy` privacy manifest.
 
 ### Changed
 - The Xcode app now consumes `TerminalBuffer` and `ProgramStore` from the local
   package via XcodeGen; `TerminalViewModel` delegates program/REPL logic to them.
+- `ProgramStore.load(from:)` splits on `Character.isNewline` rather than
+  `CharacterSet.newlines`, so a CRLF pair is treated as one separator instead of
+  two. The parsed result is unchanged — non-numbered lines were already
+  discarded — but the intermediate split no longer contains phantom empty lines.
 
 ### Fixed
+- Sample programs and Settings were unreachable on macOS. Both sheets collapsed
+  to their title bar and buttons, because a macOS sheet sizes itself to its
+  content and `List`/`Form` supply no intrinsic height. Both now carry a minimum
+  frame on macOS. The `.bas` resources were bundled correctly throughout — the
+  list simply had zero height to draw into.
+- `SampleProgramPicker.loadSample` had a duplicated fallback branch that reran
+  the identical lookup; the second branch now searches the bundle root, so the
+  samples resolve under both folder-reference and flattened resource layouts.
 - `TerminalBuffer.reset()` now fully clears scrollback. Previously it emptied
   scrollback and then re-captured the still-visible screen into it, so a reset
   left the last screenful of text behind.

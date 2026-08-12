@@ -1,6 +1,6 @@
 # Applesoft BASIC App
 
-An iPad app that interprets and runs Applesoft BASIC programs with a retro terminal experience. Built with SwiftUI, it provides a code editor, terminal output, lo-res/hi-res graphics, and sound — powered by the [ApplesoftBASICLib](https://github.com/jpurnell/ApplesoftBASIC) interpreter.
+An iPad, Mac, and Vision Pro app that interprets and runs Applesoft BASIC programs with a retro terminal experience. Built with SwiftUI, it provides a code editor, terminal output, lo-res/hi-res graphics, and sound — powered by the [ApplesoftBASICLib](https://github.com/jpurnell/ApplesoftBASIC) interpreter.
 
 ## Features
 
@@ -14,7 +14,7 @@ An iPad app that interprets and runs Applesoft BASIC programs with a retro termi
 ## Requirements
 
 - Xcode 17.0+
-- iOS 17.0+ (iPad, also runs on Mac via Designed for iPad)
+- iPadOS 17.0+, macOS (native build), visionOS
 - Swift 6.x with strict concurrency enabled
 
 ## Building

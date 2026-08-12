@@ -77,7 +77,7 @@ struct CodeEditorView: View {
             if case .success(let urls) = result, let url = urls.first {
                 guard url.startAccessingSecurityScopedResource() else { return }
                 defer { url.stopAccessingSecurityScopedResource() }
-                if let source = try? String(contentsOf: url) {
+                if let source = try? String(contentsOf: url, encoding: .utf8) {
                     viewModel.loadProgram(source)
                 }
             }

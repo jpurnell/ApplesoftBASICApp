@@ -28,9 +28,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2B9F52559532F0EAB592D4C5 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		2B9F52559532F0EAB592D4C5 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		3371C7C21E52909EB9D1CA3C /* SwiftUIInputHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIInputHandler.swift; sourceTree = "<group>"; };
-		3E2A8891E38E2F7DC9453777 /* ApplesoftBASICApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ApplesoftBASICApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3E2A8891E38E2F7DC9453777 /* ApplesoftBASICApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ApplesoftBASICApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		55E9380CA91FD53FE879B48A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5D38BAD6BF2E790AA8F38C05 /* CodeEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeEditorView.swift; sourceTree = "<group>"; };
 		649540E9387F0012CB527503 /* RetroTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetroTheme.swift; sourceTree = "<group>"; };
@@ -189,6 +189,11 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1700;
+				TargetAttributes = {
+					1269321F48E090635162924D = {
+						DevelopmentTeam = BNDA9Y6YV9;
+					};
+				};
 			};
 			buildConfigurationList = C61DB12F50B50954AAA5826E /* Build configuration list for PBXProject "ApplesoftBASICApp" */;
 			developmentRegion = en;
@@ -321,7 +326,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.justinpurnell.ApplesoftBASIC;
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = iphoneos;
@@ -413,7 +418,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.justinpurnell.ApplesoftBASIC;
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = iphoneos;
