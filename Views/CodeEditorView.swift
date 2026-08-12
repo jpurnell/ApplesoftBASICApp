@@ -57,13 +57,19 @@ struct CodeEditorView: View {
                         viewModel.clearTerminal()
                     }
                 } label: {
+                    // Menu supplies its own label styling, so the inherited
+                    // foregroundStyle above does not reach this glyph.
                     Image(systemName: "trash")
+                        .foregroundStyle(theme.textColor)
                 } primaryAction: {
                     viewModel.clearEditor()
                 }
                 .help("Clear (long press for options)")
             }
             .font(.title3)
+            // Tint to the phosphor colour; the default label colour is dark and
+            // vanishes against every theme background except Paper.
+            .foregroundStyle(theme.textColor)
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
             .background(theme.backgroundColor.opacity(0.8))

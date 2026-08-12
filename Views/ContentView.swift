@@ -52,6 +52,11 @@ struct ContentView: View {
                     }
                 }
         }
+        // The phosphor themes paint a black background, but system chrome — the
+        // navigation title, toolbar glyphs, dividers, sheet backgrounds — draws
+        // in the window's appearance. Left light, that chrome is dark-on-black
+        // and effectively invisible.
+        .preferredColorScheme(themeSettings.theme == .paper ? .light : .dark)
         .sheet(isPresented: $showingSettings) {
             SettingsView(themeSettings: themeSettings)
         }

@@ -36,6 +36,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   content and `List`/`Form` supply no intrinsic height. Both now carry a minimum
   frame on macOS. The `.bas` resources were bundled correctly throughout — the
   list simply had zero height to draw into.
+- The editor's toolbar icons, the navigation title, and the window toolbar glyphs
+  were invisible in every theme except Paper. The phosphor themes paint a black
+  background, but the window stayed in light appearance, so system-default
+  foreground colours drew dark-on-black. The root view now matches the window
+  appearance to the theme, and the editor icons take the phosphor colour.
 - `SampleProgramPicker.loadSample` had a duplicated fallback branch that reran
   the identical lookup; the second branch now searches the bundle root, so the
   samples resolve under both folder-reference and flattened resource layouts.
