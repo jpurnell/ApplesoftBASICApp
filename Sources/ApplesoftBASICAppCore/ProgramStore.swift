@@ -58,7 +58,7 @@ public struct ProgramStore: Equatable, Sendable {
     /// - Parameter source: The multi-line program source.
     public mutating func load(from source: String) {
         lines.removeAll()
-        for rawLine in source.components(separatedBy: .newlines) {
+        for rawLine in source.split(omittingEmptySubsequences: false, whereSeparator: \.isNewline) {
             let trimmed = rawLine.trimmingCharacters(in: .whitespaces)
             guard let lineNumber = Self.leadingLineNumber(of: trimmed) else { continue }
             lines[lineNumber] = trimmed
