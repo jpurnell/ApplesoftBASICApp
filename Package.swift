@@ -19,7 +19,8 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "ApplesoftBASICAppCore"
+            name: "ApplesoftBASICAppCore",
+            resources: [.copy("ApplesoftBASICAppCore.docc")]
         ),
         .testTarget(
             name: "ApplesoftBASICAppCoreTests",

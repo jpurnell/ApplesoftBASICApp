@@ -21,6 +21,7 @@ enabledCheckers:
   - memory-lifecycle
   - mcp-readiness
   - process-safety
+  - liveness
   - complexity
   - hig-auditor
   - appintents-readiness

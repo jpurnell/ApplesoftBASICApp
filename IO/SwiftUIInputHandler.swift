@@ -1,17 +1,23 @@
 import Foundation
 import ApplesoftBASICLib
+import ApplesoftBASICAppCore
 
 /// Bridges the interpreter's synchronous InputHandler to SwiftUI.
 ///
 /// When the interpreter calls `readLine(prompt:)` or `getChar()`, this handler:
 /// 1. Posts the prompt to the main actor via the `onPrompt` callback
-/// 2. Blocks the interpreter's background thread with a semaphore
+/// 2. Blocks the interpreter's background thread on a `BlockingInputChannel`
 /// 3. Waits for the UI to call `provideInput(_:)` or `cancel()`
 /// 4. Returns the input string to the interpreter
+///
+/// The blocking handoff itself — bounded waits, consuming reads, latched
+/// cancellation — lives in ``BlockingInputChannel``, which is testable without
+/// SwiftUI or the interpreter. This type is only the protocol conformance and
+/// the prompt callback.
+// Justification: immutable stored properties; the blocking state lives in BlockingInputChannel.
 final class SwiftUIInputHandler: InputHandler, @unchecked Sendable {
 
-    private let semaphore = DispatchSemaphore(value: 0)
-    private var pendingInput: String?
+    private let channel = BlockingInputChannel()
     private let onPrompt: @Sendable (String, InputMode) -> Void
 
     /// Whether the handler is waiting for a single character or a full line.
@@ -31,26 +37,26 @@ final class SwiftUIInputHandler: InputHandler, @unchecked Sendable {
 
     func readLine(prompt: String) -> String? {
         onPrompt(prompt, .line)
-        semaphore.wait()
-        return pendingInput
+        return channel.awaitInput()
     }
 
     func getChar() -> Character? {
         onPrompt("", .character)
-        semaphore.wait()
-        return pendingInput?.first
+        return channel.awaitInput()?.first
     }
 
     /// Called from the UI when the user submits input.
     func provideInput(_ text: String) {
-        pendingInput = text
-        semaphore.signal()
+        channel.provide(text)
     }
 
     /// Called to cancel input (e.g., user hits STOP).
     /// Returns nil to the interpreter, which handles it gracefully.
+    ///
+    /// Cancellation latches, so a STOP issued while the interpreter is between
+    /// prompts still ends the next one. The view model creates a fresh handler
+    /// per run, so a cancelled handler is never reused.
     func cancel() {
-        pendingInput = nil
-        semaphore.signal()
+        channel.cancel()
     }
 }

@@ -6,6 +6,33 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+- `BlockingInputChannel` in `ApplesoftBASICAppCore`: the UI-to-interpreter input
+  handoff, extracted from `SwiftUIInputHandler` so it can be tested without
+  SwiftUI or the interpreter. 15 unit tests cover the state machine directly and
+  the blocking waits through detached tasks.
+- A DocC catalogue for `ApplesoftBASICAppCore`, curating the package's public
+  types into topic groups. The `doc-lint` checker had been failing because no
+  target owned a catalogue, so it was examining nothing.
+- `liveness` added to `enabledCheckers`. It was not in the default set, which is
+  how the unbounded waits below reached `main` in the first place.
+
+### Fixed
+- `SwiftUIInputHandler` parked the interpreter's background thread on
+  `DispatchSemaphore.wait()` with no deadline. If the signal never arrived, that
+  thread was stranded for the life of the process. Waits are now sliced with
+  `wait(timeout:)`, so the thread re-reads its state instead of sleeping
+  forever. Input itself still never times out — a user may take as long as they
+  like to type.
+- A stop issued while the interpreter was between prompts could make the *next*
+  `INPUT` return immediately with stale text. `stop()` calls `cancel()`
+  unconditionally, and the counting semaphore banked that signal and spent it on
+  the following wait. The semaphore is now only a wake-up hint; locked state is
+  the source of truth, reads consume, and cancellation latches.
+- `pendingInput` was written from the main actor and read from the interpreter
+  thread with no synchronization, under an `@unchecked Sendable` conformance
+  that silenced the compiler. It is now guarded by a lock.
+
 ## [1.1.0] - 2026-08-12
 
 ### Added
