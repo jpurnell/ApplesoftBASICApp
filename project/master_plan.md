@@ -140,10 +140,11 @@ the UI answers.
       Open Sample / Run / Stop / List / Clear, a macOS `Settings` scene on ⌘,
       and a sample browser that previews a listing before loading it. The scene
       owns the interpreter and the theme settings so the menu bar, the Settings
-      window, and the window's toolbar all address the same objects
+      window, and the window's toolbar all address the same objects (v1.2.0)
 - [x] Accessibility pass: VoiceOver labels on every glyph-only control, Dynamic
       Type on the terminal fonts (`relativeTo: .body` over the size slider), and
       High Contrast variants for all six theme colours in the asset catalogue
+      (v1.2.0)
 - [x] Interpreter input handoff bounded and tested — `BlockingInputChannel`
       replaces the unbounded `DispatchSemaphore.wait()` that could strand the
       interpreter thread, and fixes the banked-signal bug where a STOP between
@@ -209,7 +210,11 @@ gate backlog behind it: `concurrency`, `accessibility`, `memory-lifecycle`, and
 `consistency`. The gate is at 0 errors / 0 warnings across all 28 enabled checkers,
 with no exemption comments added. The phosphor palette moved to the asset catalogue
 with High Contrast variants rather than being exempted as intentional — the colours
-are still the ones chosen here, but Increase Contrast now reaches them.)
+are still the ones chosen here, but Increase Contrast now reaches them. Cut v1.2.0:
+CHANGELOG's Unreleased section became a dated 1.2.0 heading, `MARKETING_VERSION`
+went to 1.2.0 via `project.yml` + `xcodegen generate`, and the Keep a Changelog
+link-reference definitions were added — this file had never had any, so every
+bracketed version heading had been rendering as literal brackets.)
 
 **Previously:** 2026-08-17 (filled in the Architecture sections against shipped
 code — they had been template placeholders since the project began, so the module

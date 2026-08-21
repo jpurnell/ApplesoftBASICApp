@@ -55,7 +55,7 @@ targets:
       base:
         SWIFT_STRICT_CONCURRENCY: complete
         PRODUCT_BUNDLE_IDENTIFIER: com.justinpurnell.ApplesoftBASIC
-        MARKETING_VERSION: "1.1.0"
+        MARKETING_VERSION: "1.2.0"
         CURRENT_PROJECT_VERSION: "1"
         DEVELOPMENT_TEAM: BNDA9Y6YV9
         # iPad (2) + visionOS (7); macOS comes from SUPPORTED_PLATFORMS below.

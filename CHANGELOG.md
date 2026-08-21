@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-08-20
+
 ### Added
 - A menu bar for the app (`ProgramCommands`): New Program (⌘N), Open Sample
   (⌘O), Run (⌘R), Stop (⌘.), List Program, Clear Editor, and Clear Terminal
@@ -144,3 +146,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Sound uses AudioSoundHandler directly instead of ToneGenerator
 - Quality gate config: exclude SPM build checker (Xcode-only project)
 - Added latestReport.json to .gitignore
+
+[Unreleased]: https://github.com/jpurnell/ApplesoftBASICApp/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/jpurnell/ApplesoftBASICApp/compare/v1.1.0...v1.2.0
+[1.1.0]: https://github.com/jpurnell/ApplesoftBASICApp/compare/v1.0.0...v1.1.0
+[1.0.0]: https://github.com/jpurnell/ApplesoftBASICApp/releases/tag/v1.0.0
