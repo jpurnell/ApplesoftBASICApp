@@ -64,6 +64,8 @@ struct TerminalView: View {
                         systemImage: showREPL ? "chevron.down" : "terminal"
                     )
                 }
+                .help(showREPL ? "Hide the direct-mode console (⌘J)" : "Show the direct-mode console (⌘J)")
+                .keyboardShortcut("j", modifiers: .command)
             }
         }
     }
@@ -130,6 +132,7 @@ struct TerminalView: View {
                 } label: {
                     Image(systemName: "return")
                         .foregroundStyle(theme.textColor)
+                        .accessibilityLabel("Submit Input")
                 }
             }
         }
@@ -172,6 +175,7 @@ struct TerminalView: View {
             } label: {
                 Image(systemName: "return")
                     .foregroundStyle(theme.textColor)
+                    .accessibilityLabel("Run Console Line")
             }
             .disabled(viewModel.isRunning)
         }

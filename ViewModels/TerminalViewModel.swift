@@ -49,7 +49,8 @@ final class TerminalViewModel {
 
     // MARK: - Private State
 
-    private var runTask: Task<Void, Never>?
+    /// The interpreter run, whose cancellation is tied to this object's lifetime.
+    private let interpreterRun = InterpreterRun()
     private var inputHandler: SwiftUIInputHandler?
 
     /// A simple counter for generating unique line IDs.
@@ -122,7 +123,7 @@ final class TerminalViewModel {
     /// Stops the currently running program.
     func stop() {
         inputHandler?.cancel()
-        runTask?.cancel()
+        interpreterRun.cancel()
         isRunning = false
         isWaitingForInput = false
         appendToTerminal("\n?BREAK\n")
@@ -188,15 +189,13 @@ final class TerminalViewModel {
 
         let inputHandler = SwiftUIInputHandler { [weak self] prompt, mode in
             Task { @MainActor [weak self] in
-                self?.isWaitingForInput = true
-                self?.inputPrompt = prompt
-                self?.inputMode = mode
+                self?.beginWaitingForInput(prompt: prompt, mode: mode)
             }
         }
         self.inputHandler = inputHandler
 
         let soundHandler = soundAdapter
-        runTask = Task.detached(priority: .userInitiated) { [weak self] in
+        interpreterRun.start { [weak self] in
             do {
                 var lexer = Lexer(source: source)
                 let tokens = try lexer.tokenize()
@@ -226,6 +225,16 @@ final class TerminalViewModel {
         }
     }
 
+    /// Records that the interpreter has stopped for `INPUT`/`GET`.
+    ///
+    /// The prompt callback arrives on the interpreter's thread, so it hops here
+    /// rather than writing this state across the isolation boundary itself.
+    private func beginWaitingForInput(prompt: String, mode: SwiftUIInputHandler.InputMode) {
+        isWaitingForInput = true
+        inputPrompt = prompt
+        inputMode = mode
+    }
+
     private func handleOutputAction(_ action: SwiftUIOutputHandler.Action) {
         switch action {
         case .print(let text):
@@ -252,5 +261,33 @@ final class TerminalViewModel {
         }
         outputLines = result
         displayText = allLines.joined(separator: "\n")
+    }
+}
+
+/// Owns the detached task running the interpreter.
+///
+/// The handle lives here rather than in ``TerminalViewModel`` for two reasons.
+/// A `@MainActor` type's `deinit` is non-isolated and must not reach into its
+/// own isolated state, so it has no safe way to cancel a task it stores; this
+/// object is unisolated, so its `deinit` can. And starting a run through one
+/// method makes the "one run at a time" rule explicit — the previous task is
+/// cancelled rather than dropped still-running when a new `RUN` replaces it.
+final class InterpreterRun {
+    private var task: Task<Void, Never>?
+
+    /// Cancels any run in flight and starts `operation` in its place.
+    func start(_ operation: @escaping @Sendable () async -> Void) {
+        task?.cancel()
+        task = Task.detached(priority: .userInitiated, operation: operation)
+    }
+
+    /// Cancels the run in flight, if there is one.
+    func cancel() {
+        task?.cancel()
+        task = nil
+    }
+
+    deinit {
+        task?.cancel()
     }
 }

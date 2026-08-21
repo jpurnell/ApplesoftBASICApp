@@ -5,7 +5,11 @@ import ApplesoftBASICLib
 ///
 /// Receives PRINT calls on the interpreter's background thread and
 /// dispatches them to a callback for the main actor to process.
-final class SwiftUIOutputHandler: OutputHandler, @unchecked Sendable {
+///
+/// `OutputHandler` already requires `Sendable`, and the compiler can check this
+/// one: the single stored property is an immutable `@Sendable` closure, so there
+/// is nothing here for an `@unchecked` conformance to paper over.
+final class SwiftUIOutputHandler: OutputHandler {
 
     /// Actions the terminal can receive.
     enum Action: Sendable {

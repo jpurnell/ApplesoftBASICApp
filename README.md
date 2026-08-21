@@ -8,8 +8,10 @@ An iPad, Mac, and Vision Pro app that interprets and runs Applesoft BASIC progra
 - **Terminal Emulator** — scrollable output buffer with classic green-on-black theme
 - **Graphics** — lo-res and hi-res drawing modes
 - **Sound** — speaker tone generation via `PEEK`/`POKE` emulation
-- **Sample Programs** — bundled collection including Adventure, Fibonacci, Sine Wave, and more
-- **Settings** — configurable theme and display options
+- **Sample Programs** — bundled collection including Adventure, Fibonacci, Sine Wave, and more, each previewed before it loads
+- **Settings** — configurable theme and display options; a Settings window (⌘,) on macOS
+- **Menu Bar** — Run (⌘R), Stop (⌘.), New (⌘N), Open Sample (⌘O), and the Clear commands, which also appear in iPadOS's Command-key overlay
+- **Accessibility** — VoiceOver labels throughout, Dynamic Type over the chosen terminal size, and High Contrast variants of every theme colour
 
 ## Requirements
 

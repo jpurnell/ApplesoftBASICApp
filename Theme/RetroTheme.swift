@@ -1,6 +1,11 @@
 import SwiftUI
 
 /// Available terminal color themes.
+///
+/// The phosphor colours are deliberate — they are the product, not a default
+/// anyone should override — but they live in the asset catalogue rather than in
+/// literals here so each one can carry a High Contrast variant. With Increase
+/// Contrast on, the phosphors brighten and Paper goes to pure black on white.
 enum TerminalTheme: String, CaseIterable, Identifiable, Sendable {
     case greenPhosphor = "Green Phosphor"
     case amberPhosphor = "Amber Phosphor"
@@ -14,20 +19,20 @@ enum TerminalTheme: String, CaseIterable, Identifiable, Sendable {
         case .greenPhosphor, .amberPhosphor, .whitePhosphor:
             return .black
         case .paper:
-            return Color(red: 1.0, green: 0.97, blue: 0.91)
+            return Color("PaperBackground")
         }
     }
 
     var textColor: Color {
         switch self {
         case .greenPhosphor:
-            return Color(red: 0.2, green: 1.0, blue: 0.2)
+            return Color("GreenPhosphorText")
         case .amberPhosphor:
-            return Color(red: 1.0, green: 0.69, blue: 0.0)
+            return Color("AmberPhosphorText")
         case .whitePhosphor:
-            return Color(red: 0.9, green: 0.9, blue: 0.9)
+            return Color("WhitePhosphorText")
         case .paper:
-            return Color(red: 0.2, green: 0.2, blue: 0.2)
+            return Color("PaperText")
         }
     }
 
@@ -46,7 +51,7 @@ enum TerminalTheme: String, CaseIterable, Identifiable, Sendable {
     var inputFieldBackground: Color {
         switch self {
         case .paper:
-            return Color(red: 0.95, green: 0.93, blue: 0.87)
+            return Color("PaperInputField")
         default:
             return Color.white.opacity(0.05)
         }
@@ -69,14 +74,21 @@ enum TerminalFont: String, CaseIterable, Identifiable, Sendable {
         }
     }
 
+    /// The font at the user's chosen point size.
+    ///
+    /// `relativeTo: .body` layers Dynamic Type on top of that choice, so the
+    /// size slider sets the base and the system text-size setting still moves
+    /// it. The monospaced option names Menlo rather than asking for
+    /// `.system(size:design:)`, because only the `.custom` form takes
+    /// `relativeTo:` — a system font pinned to a point size does not scale.
     func font(size: CGFloat) -> Font {
         switch self {
         case .printChar21:
-            return .custom("PrintChar21", size: size)
+            return .custom("PrintChar21", size: size, relativeTo: .body)
         case .prNumber3:
-            return .custom("PRNumber3", size: size)
+            return .custom("PRNumber3", size: size, relativeTo: .body)
         case .systemMono:
-            return .system(size: size, design: .monospaced)
+            return .custom("Menlo", size: size, relativeTo: .body)
         }
     }
 }

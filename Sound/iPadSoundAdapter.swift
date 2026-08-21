@@ -5,8 +5,12 @@ import AVFoundation
 ///
 /// Uses the library's AudioSoundHandler directly since playTone is now
 /// blocking (synchronous) and AVAudioEngine works from any thread.
+///
+/// `SoundHandler` already requires `Sendable`, and the compiler can check this
+/// one: the only stored property is an immutable `AudioSoundHandler`, which
+/// vouches for its own thread safety. Nothing here needs `@unchecked`.
 #if canImport(AVFoundation)
-final class iPadSoundAdapter: SoundHandler, @unchecked Sendable {
+final class iPadSoundAdapter: SoundHandler {
     private let handler = AudioSoundHandler()
 
     /// Creates the sound adapter.
@@ -23,7 +27,7 @@ final class iPadSoundAdapter: SoundHandler, @unchecked Sendable {
     }
 }
 #else
-final class iPadSoundAdapter: SoundHandler, @unchecked Sendable {
+final class iPadSoundAdapter: SoundHandler {
     init() {}
     func beep() {}
     func playTone(frequency: Double, duration: Double) {}

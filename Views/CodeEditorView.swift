@@ -28,18 +28,24 @@ struct CodeEditorView: View {
             Divider()
 
             HStack(spacing: 20) {
+                // These controls are glyph-only, so each image carries the name
+                // VoiceOver reads; without it the announcement is the SF Symbol
+                // name, or nothing at all.
                 Button { showingSamples = true } label: {
                     Image(systemName: "book")
+                        .accessibilityLabel("Sample Programs")
                 }
                 .help("Examples")
 
                 Button { showingFileImporter = true } label: {
                     Image(systemName: "folder")
+                        .accessibilityLabel("Open Program")
                 }
                 .help("Open")
 
                 Button { showingFileExporter = true } label: {
                     Image(systemName: "square.and.arrow.down")
+                        .accessibilityLabel("Save Program")
                 }
                 .help("Save")
 
@@ -61,6 +67,7 @@ struct CodeEditorView: View {
                     // foregroundStyle above does not reach this glyph.
                     Image(systemName: "trash")
                         .foregroundStyle(theme.textColor)
+                        .accessibilityLabel("Clear")
                 } primaryAction: {
                     viewModel.clearEditor()
                 }

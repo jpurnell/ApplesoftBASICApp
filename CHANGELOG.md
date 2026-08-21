@@ -7,6 +7,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased]
 
 ### Added
+- A menu bar for the app (`ProgramCommands`): New Program (⌘N), Open Sample
+  (⌘O), Run (⌘R), Stop (⌘.), List Program, Clear Editor, and Clear Terminal
+  (⌘K). On macOS this is the discoverable list of what the app does; on iPad the
+  same commands populate the Command-key shortcut overlay. Run/Stop and List are
+  enabled against the interpreter's running state.
+- A macOS `Settings` scene, so ⌘, opens preferences in a window rather than the
+  app having no answer to the standard shortcut. The toolbar's gear becomes a
+  `SettingsLink` there; iPad and Vision Pro keep the sheet.
+- A listing preview in the sample-program browser. Selecting a sample shows its
+  source beside the list with an explicit Load Program button, instead of a tap
+  replacing the editor's contents sight-unseen. Rows also carry a context menu.
+- Tooltips (`.help`) on the toolbar buttons, and ⌘J for the console toggle.
+- Accessibility labels on every glyph-only control, so VoiceOver announces
+  "Sample Programs" or "Submit Input" rather than an SF Symbol name.
+- High Contrast variants for the terminal palette. The six theme colours moved
+  from literals in `RetroTheme` into the asset catalogue, where each carries a
+  second value used when Increase Contrast is on: the phosphors brighten, and
+  Paper goes to black on white.
 - `BlockingInputChannel` in `ApplesoftBASICAppCore`: the UI-to-interpreter input
   handoff, extracted from `SwiftUIInputHandler` so it can be tested without
   SwiftUI or the interpreter. 15 unit tests cover the state machine directly and
@@ -17,7 +35,34 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `liveness` added to `enabledCheckers`. It was not in the default set, which is
   how the unbounded waits below reached `main` in the first place.
 
+### Changed
+- The interpreter and the appearance settings moved from `ContentView` up to the
+  `App` scene. The menu bar and the macOS Settings window are siblings of the
+  window, not children of it, so all three now drive the same objects.
+- Settings and the sample browser no longer wrap themselves in a
+  `NavigationStack`. Neither had anything to push: the settings sheet supplies
+  its own title and Done button, and the browser is a two-column split view. The
+  form itself is now `SettingsForm`, which both the sheet and the macOS Settings
+  scene present.
+- The terminal fonts scale with Dynamic Type. `relativeTo: .body` layers the
+  system text-size setting on top of the size slider, so the slider sets the
+  base rather than fixing the result. The monospaced option now names Menlo,
+  because only `Font.custom` accepts `relativeTo:` — a system font pinned to a
+  point size cannot scale.
+- `SwiftUIOutputHandler` and `iPadSoundAdapter` dropped their `@unchecked
+  Sendable` conformances. Both protocols already require `Sendable` and both
+  types satisfy it as written — immutable stored properties that are themselves
+  Sendable — so the `@unchecked` was suppressing a check that passes.
+
 ### Fixed
+- A second `RUN` dropped the previous interpreter task still running instead of
+  cancelling it. The task handle now lives in `InterpreterRun`, whose `start`
+  cancels whatever is in flight and whose `deinit` cancels on the way out — a
+  `@MainActor` type's `deinit` is non-isolated and cannot safely reach its own
+  stored task, which is why the handle moved out of `TerminalViewModel`.
+- The `INPUT`/`GET` prompt callback wrote three pieces of main-actor state
+  directly from the interpreter's thread. It now hops through one isolated
+  method, `beginWaitingForInput(prompt:mode:)`.
 - `SwiftUIInputHandler` parked the interpreter's background thread on
   `DispatchSemaphore.wait()` with no deadline. If the signal never arrived, that
   thread was stranded for the life of the process. Waits are now sliced with

@@ -68,7 +68,9 @@ needs a UI framework.
 | `ProgramStore` | Line-numbered program storage, `LIST`/`DEL` ranges, source parse/render |
 | `REPLParser` / `REPLCommand` | Classifies a typed line as stored line, direct statement, or empty |
 | `BlockingInputChannel` | Hands input to the blocked interpreter thread; bounded waits, latched cancellation |
-| `TerminalViewModel` | `@MainActor @Observable` bridge; owns the run task and the handlers |
+| `TerminalViewModel` | `@MainActor @Observable` bridge; owns the handlers and the terminal state |
+| `InterpreterRun` | Holds the detached run task; cancels on replacement and on `deinit`, which a `@MainActor` type cannot do for itself |
+| `ProgramCommands` | The menu bar: New / Open Sample / Run / Stop / List / Clear, with their key equivalents |
 | `SwiftUIInputHandler` | `InputHandler` conformance; prompts the UI, delegates blocking to `BlockingInputChannel` |
 | `SwiftUIOutputHandler` | `OutputHandler` conformance; forwards output actions to the main actor |
 | `iPadSoundAdapter` | `SoundHandler` conformance; speaker tone generation |
@@ -134,6 +136,14 @@ the UI answers.
       with the editor pane hidden
 - [x] visionOS verified in the simulator (visionOS 27.0) — split view, themed
       chrome, and program execution all render correctly
+- [x] Desktop-shaped interface: a menu bar (`ProgramCommands`) covering New /
+      Open Sample / Run / Stop / List / Clear, a macOS `Settings` scene on ⌘,
+      and a sample browser that previews a listing before loading it. The scene
+      owns the interpreter and the theme settings so the menu bar, the Settings
+      window, and the window's toolbar all address the same objects
+- [x] Accessibility pass: VoiceOver labels on every glyph-only control, Dynamic
+      Type on the terminal fonts (`relativeTo: .body` over the size slider), and
+      High Contrast variants for all six theme colours in the asset catalogue
 - [x] Interpreter input handoff bounded and tested — `BlockingInputChannel`
       replaces the unbounded `DispatchSemaphore.wait()` that could strand the
       interpreter thread, and fixes the banked-signal bug where a STOP between
@@ -193,7 +203,15 @@ This principle is operationalized in the **Adversarial Review** step of `design_
 
 ---
 
-**Last Updated:** 2026-08-17 (filled in the Architecture sections against shipped
+**Last Updated:** 2026-08-19 (recorded the HIG work — menu bar commands, the macOS
+Settings scene, the sample browser's preview pane — and then cleared the rest of the
+gate backlog behind it: `concurrency`, `accessibility`, `memory-lifecycle`, and
+`consistency`. The gate is at 0 errors / 0 warnings across all 28 enabled checkers,
+with no exemption comments added. The phosphor palette moved to the asset catalogue
+with High Contrast variants rather than being exempted as intentional — the colours
+are still the ones chosen here, but Increase Contrast now reaches them.)
+
+**Previously:** 2026-08-17 (filled in the Architecture sections against shipped
 code — they had been template placeholders since the project began, so the module
 structure, key types, data flow, and architectural decisions are now recorded
 rather than assumed. Added the `Modules` checklist the `status` checker was asking
