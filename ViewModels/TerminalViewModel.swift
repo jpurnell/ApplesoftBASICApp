@@ -182,14 +182,14 @@ final class TerminalViewModel {
         isRunning = true
 
         let outputHandler = SwiftUIOutputHandler { [weak self] action in
-            Task { @MainActor [weak self] in
-                self?.handleOutputAction(action)
+            Task { [weak self] in
+                await self?.handleOutputAction(action)
             }
         }
 
         let inputHandler = SwiftUIInputHandler { [weak self] prompt, mode in
-            Task { @MainActor [weak self] in
-                self?.beginWaitingForInput(prompt: prompt, mode: mode)
+            Task { [weak self] in
+                await self?.beginWaitingForInput(prompt: prompt, mode: mode)
             }
         }
         self.inputHandler = inputHandler
